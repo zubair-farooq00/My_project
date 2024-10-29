@@ -13,12 +13,17 @@ async function signup(event) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, email, password, gender })
     });
-    await response.json();
+    
+    const data = await response.json();
+
     if (response.ok) {
-        alert(data.message)
+        alert(data.message);
         window.location.href = 'login.html';
+    } else {
+        alert(data.message || 'Signup failed');
     }
 }
+
 
 
 
