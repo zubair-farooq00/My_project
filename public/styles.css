@@ -1,0 +1,86 @@
+/* Reset and body styling */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: black;
+    color: white;
+}
+
+.form-container {
+    background: #fff;
+    width: 350px; 
+    padding: 20px; 
+    border-radius: 10px; 
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+.form-container h2 {
+    margin-bottom: 20px;
+    color: #31445c;
+}
+
+/* Input fields */
+input,
+select {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #ddd; 
+    border-radius: 5px;
+    font-size: 16px;
+    outline: none; 
+    transition: border 0.3s;
+}
+
+
+button {
+    width: 100%; 
+    padding: 12px; 
+    background: black;
+    border: none; 
+    color: #fff; 
+    font-size: 16px; 
+    border-radius: 5px; 
+    cursor: pointer; 
+    transition: 0.5s;
+}
+
+button:hover {
+    background:  #31445c; 
+}
+.link {
+    display: block;
+    margin-top: 15px; 
+    color: #31445c;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.link:hover {
+    text-decoration: underline; 
+}
+
+.small-text {
+    font-size: 14px; 
+    color: #31445c; 
+    margin-top: 10px; 
+}
+
+
+.post {
+    background: #f0f0f0; /* Light gray for post background */
+    padding: 10px; /* Inner spacing */
+    margin: 10px 0; /* Space between posts */
+    border-radius: 5px; /* Rounded corners */
+    text-align: left; /* Align text to the left */
+}

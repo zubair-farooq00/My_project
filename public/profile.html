@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Profile</title>
+    <link rel="stylesheet" href="profile.css">
+</head>
+<body>
+    <div class="container">
+        <header class="profile-header">
+            <h2>Username:</h2>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </header>
+
+        <div id="profileInfo" class="profile-info">
+            <!-- User info will be populated here -->
+        </div>
+
+        <form id="postForm" class="post-form" onsubmit="createPost(event)">
+            <textarea id="postContent" placeholder="Write something..." required></textarea>
+            <button type="submit">Submit Post</button>
+        </form>
+        <div class="btn">
+        <button class="delete-btn" onclick="deleteUser()">Delete User</button>
+        <button class="update-btn" onclick="redirectToUpdatePage()">Update Profile</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
