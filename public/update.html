@@ -3,10 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Update Profile</title>
-    <link rel="stylesheet" href="profile.css">
+    <title>Profile Settings</title>
+    <link rel="stylesheet" href="update.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
+     <!-- navigation menu -->
+     <nav>
+        <div class="navbar">
+          <div class="logo"><a href="http://localhost:4000/timeline.html">linkUp <i class="fa-solid fa-square-share-nodes"></i> </a></div>
+          <ul class="menu">
+            <li><a href="http://localhost:4000/timeline.html">Home</a></li>
+            <li><a href="http://localhost:4000/profile.html">My profile</a></li>
+            <li><a href="http://localhost:4000/update.html">Setting</a></li>
+          </ul>
+          <button class="logout-btn" onclick="logout()">Logout</button> 
+        </div>
+      </nav>
     <div class="update-container">
         <h2>Update Profile</h2>
         <form id="updateForm" onsubmit="updateUser(event)">
@@ -31,7 +44,17 @@
 
             <button type="submit" class="submit-btn">Update Profile</button>
         </form>
+        <button class="delete-btn" onclick="deleteUser()">Delete User</button>
     </div>
+    <!-- Footer HTML -->
+<footer class="footer">
+    <p>LinkUp all rights reserved © 2024</p>
+    <ul class="footer-links">
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Terms of Service</a></li>
+        <li><a href="#">Contact Us</a></li>
+    </ul>
+</footer>
 
     <script src="script.js"></script>
 </body>

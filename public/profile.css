@@ -1,43 +1,50 @@
 /* Reset CSS for consistent appearance across browsers */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Arial', sans-serif;
+    font-family: 'Poppins', sans-serif;
 }
-
-/* Body styling */
-body {
-    background-color: #f0f4f8;
+/* Nav bar section */
+nav{
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    z-index: 2 !important;
+    height: 75px;
+    background: #000000;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+   }
+   nav .navbar{
     display: flex;
-    justify-content: center;
     align-items: center;
-    height: 100vh;
-}
-
-/* Container for profile content */
-.container {
-    width: 80%;
-    max-width: 600px;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-}
-
-/* Header styling */
-.profile-header {
-    display: flex;
     justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-.profile-header h2 {
-    color: #333;
-    font-size: 24px;
-}
-
+    height: 100%;
+    max-width: 90%;
+    background: #000000;
+    margin: auto;
+   }
+   nav .navbar .logo a{
+     color: #fff;
+     font-size: 27px;
+     font-weight: 600;
+     text-decoration: none;
+   }
+   nav .navbar .menu{
+     display: flex;
+   }
+   .navbar .menu li{
+     list-style: none;
+     margin: 0 15px;
+   }
+   .navbar .menu li a{
+     color: #fff;
+     font-size: 17px;
+     font-weight: 500;
+     text-decoration: none;
+   }
 .logout-btn {
     padding: 10px 20px;
     background-color: #e74c3c;
@@ -51,185 +58,183 @@ body {
 .logout-btn:hover {
     background-color: #c0392b;
 }
+/* Profile and Post Section */
+.container-sec {
+    width: 100%;
+    padding: 2em;
+    min-height: 100vh; 
+}
 
-/* Profile info styling */
+.container {
+    margin: 0 auto;
+    text-align: center;
+    padding-top: 60px;
+    max-width: 650px;
+    width: 100%;
+}
+
 .profile-info {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-/* User details styling */
-.user-card {
-    background-color: #f8f9fa;
-    padding: 15px;
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-}
-
-.user-card h3 {
-    margin-bottom: 5px;
-    font-size: 20px;
-    color: #333;
-}
-
-.user-card p {
-    color: #555;
-    font-size: 14px;
-}
-
-/* Posts section styling */
-.posts-container {
-    margin-top: 10px;
-}
-
-.post {
-    background-color: #eef1f5;
-    padding: 10px;
-    margin-bottom: 10px;
+    background-color: #000000;
+    padding: 1em;
     border-radius: 8px;
-    border-left: 4px solid #3498db;
-}
-
-.post h4 {
-    margin-bottom: 5px;
-    color: #2c3e50;
-    font-size: 16px;
-}
-
-.post p {
-    font-size: 14px;
-    color: #34495e;
-}
-
-/* Post creation form */
-.post-form {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-top: 20px;
+    margin-bottom: 1em;
+    color: white;
 }
 
 .post-form textarea {
-    resize: none;
     width: 100%;
-    height: 80px;
-    padding: 10px;
+    padding: 1em;
+    border: 1px solid #ddd;
     border-radius: 5px;
-    border: 1px solid #ccc;
+    margin-bottom: 1em;
+}
+.post-image {
+    width: 100%; 
+    height: 350px; 
+    object-fit: cover;
+    object-position: top;
+    border-radius: 8px; 
+}
+.post-form input[type="file"] {
+    margin-bottom: 1em;
 }
 
 .post-form button {
-    align-self: flex-end;
-    padding: 10px 20px;
-    background-color: #3498db;
-    color: white;
+    background-color: #000;
+    color: #fff;
     border: none;
-    border-radius: 5px;
+    padding: 0.5em 1em;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    border-radius: 5px;
+    font-size: 1em;
 }
 
 .post-form button:hover {
-    background-color: #2980b9;
+    background-color: #444;
 }
-.btn{
-    padding-top: 20px;
+#post{
+    margin-top: 22px;
+}
+
+
+.posts-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5em;
+    width: 100%;
+}
+.posts-container p{
+    margin-bottom: 10px;
+    color: #8a8a8a;
+}
+.posts-container button{
+    background-color: transparent;
+    border: none;
+    position: relative;
+    left: 200px;
+    top: -25px;
+}
+.posts-container i{
+    margin-right: 10px;
+    color: gray;
+    background: transparent;
+}
+.post {
+    color: white;
+    background-color: #000000;
+    padding: 1em;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Modal Styling */
+.modal {
+    display: none;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    position: relative;
+    top: 200px;
+    left: 350px;
+    background-color: #fff;
+    padding: 2em;
+    border-radius: 8px;
+    max-width: 500px;
+    width: 90%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 1.5em;
+    cursor: pointer;
+}
+/* Styling for Like Section */
+.like-section {
+
+    margin-top: 10px;
+    background-color: #f0f0f0;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.like-section span {
+    font-size: 0.9em;
+    color: #555;
+}
+
+.like-section button {
+    position: relative;
+    left: 0px;
+    top: 2px;
+    padding: 5px;
+    background-color: #000000;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: background-color 0.3s;
+}
+
+.like-section button:hover {
+    background-color: #333;
+}
+
+
+/* Footer Styling */
+.footer {
+    background-color: #333;
+    color: #fff;
+    padding: 1em 2em;
     display: flex;
     justify-content: space-between;
-}
-.delete-btn {
-    padding: 10px 20px;
-    margin-left: 10px;
-    background-color: #e74c3c;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+    align-items: center;
+    margin-top: auto;
 }
 
-.delete-btn:hover {
-    background-color: #c0392b;
-}
-.update-btn {
-    padding: 10px 20px;
-    margin-left: 10px;
-    background-color: #f39c12;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+.footer-links {
+    list-style: none;
+    display: flex;
+    gap: 1.5em;
 }
 
-.update-btn:hover {
-    background-color: #e67e22;
+.footer-links li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 0.9em;
 }
 
-
-/* Container styling */
-.update-container {
-    background-color: #fff;
-    padding: 40px;
-    width: 400px;
-    border-radius: 15px;
-    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.1);
-    text-align: center;
+.footer p {
+    font-size: 0.9em;
 }
-
-/* Heading */
-.update-container h2 {
-    margin-bottom: 30px;
-    font-size: 24px;
-    color: #2d3436;
-}
-
-/* Form Group */
-.form-group {
-    margin-bottom: 20px;
-    text-align: left;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 5px;
-    color: #636e72;
-    font-weight: bold;
-}
-
-.form-group input,
-.form-group select {
-    width: 100%;
-    padding: 10px;
-    margin-top: 5px;
-    border: 1px solid #dfe6e9;
-    border-radius: 5px;
-    outline: none;
-    font-size: 16px;
-    transition: border-color 0.3s;
-}
-
-.form-group input:focus,
-.form-group select:focus {
-    border-color: #0984e3;
-}
-
-/* Submit Button */
-.submit-btn {
-    width: 100%;
-    background-color: #0984e3;
-    color: white;
-    padding: 12px;
-    border: none;
-    border-radius: 5px;
-    font-size: 18px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    margin-top: 10px;
-}
-
-.submit-btn:hover {
-    background-color: #74b9ff;
-}
-

@@ -84,3 +84,8 @@ button:hover {
     border-radius: 5px; /* Rounded corners */
     text-align: left; /* Align text to the left */
 }
+.forget{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}

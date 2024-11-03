@@ -24,9 +24,6 @@ async function signup(event) {
     }
 }
 
-
-
-
 // Login function
 async function login(event) {
     event.preventDefault(); 
@@ -43,7 +40,7 @@ async function login(event) {
 
     if (response.ok) {
         localStorage.setItem('token', data.token);
-        window.location.href = 'profile.html';
+        window.location.href = 'timeline.html';
     } else {
         alert(data.message || 'Login failed');
     }
@@ -67,20 +64,30 @@ async function getProfile() {
     if (response.ok) {
         const user = data.user;
         const profileInfo = document.getElementById('profileInfo');
+        const post = document.getElementById('post');
 
         profileInfo.innerHTML = `
             <div class="user-card">
                 <h3>${user.name}</h3>
                 <p>${user.email}</p>
             </div>
-            <div class="posts-container">
-                <h4>User's Posts:</h4>
-                ${user.posts.map(post => `
-                    <div class="post">
-                        <p>${post.content}</p>
-                    </div>
-                `).join('')}
+        `;
+        post.innerHTML = `
+        <div class="posts-container">
+            ${user.posts.map((post, index) => `
+            <div class="post">
+
+                <h4>${user.name}</h4>
+                <div class="btn">
+                    <button onclick="deletePost(${index})"><i class="fa-solid fa-trash"></i></button>
+                    <button onclick="openUpdateModal(${index}, '${post.content}')"><i class="fa-solid fa-pen-to-square"></i></button>
+                </div>
+                
+                <p>${post.content}</p>
+                ${post.image ? `<img src="${post.image}" alt="Post image" class="post-image">` : ''}
             </div>
+            `).join('')}
+        </div>
         `;
     } else {
         alert(data.message);
@@ -89,13 +96,87 @@ async function getProfile() {
     }
 }
 
+// Fetch all posts from other users
+async function getTimelinePosts() {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        alert('You are not authorized!');
+        window.location.href = 'login.html';
+        return;
+    }
+
+    const response = await fetch(`${API_BASE_URL}/all-posts`, {
+        method: 'GET',
+        headers: { 'Authorization': `${token}` }
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+        const timelineContainer = document.getElementById('timelineContainer');
+
+        timelineContainer.innerHTML = data.allPosts.map(user => `
+            <div class="user-timeline">
+                ${user.posts.map(post => `
+                    <div class="post">
+                        <h3>${user.userName}</h3>
+                        <p>${post.content}</p>
+                        ${post.image ? `<img src="${post.image}" alt="Post image" class="post-image">` : ''}
+                        <p>Likes: ${post.likes}</p>
+                        <button onclick="likePost('${user._id}', '${post._id}')">Like</button>
+                        <button onclick="unlikePost('${user._id}', '${post._id}')">Unlike</button>
+                    </div>
+                `).join('')}
+            </div>
+        `).join('');
+    } else {
+        alert(data.message || 'Failed to load timeline');
+    }
+}
+
+// Like a post by another user
+async function likePost(creatorId, postId) {
+    const token = localStorage.getItem('token');
+
+    const response = await fetch(`${API_BASE_URL}/user/like-post/${creatorId}/${postId}`, {
+        method: 'POST',
+        headers: { 'Authorization': `${token}` }
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+        getTimelinePosts(); // Refresh the timeline to show updated like count
+    } else {
+        alert(data.message || 'Failed to like post');
+    }
+}
+
+// Unlike a post by another user
+async function unlikePost(creatorId, postId) {
+    const token = localStorage.getItem('token');
+
+    const response = await fetch(`${API_BASE_URL}/user/unlike-post/${creatorId}/${postId}`, {
+        method: 'POST',
+        headers: { 'Authorization': `${token}` }
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+        getTimelinePosts(); // Refresh the timeline to show updated like count
+    } else {
+        alert(data.message || 'Failed to unlike post');
+    }
+}
 
 
 // Create Post function
 async function createPost(event) {
-    event.preventDefault(); // Prevent form from reloading the page
+    event.preventDefault();
 
     const postContent = document.getElementById('postContent').value;
+    const postImage = document.getElementById('postImage').files[0];
     const token = localStorage.getItem('token');
 
     if (!token) {
@@ -104,25 +185,96 @@ async function createPost(event) {
         return;
     }
 
+    const formData = new FormData();
+    formData.append('content', postContent);
+    if (postImage) {
+        formData.append('image', postImage); // Attach the image file if provided
+    }
+
     const response = await fetch(`${API_BASE_URL}/user/create-post`, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
             'Authorization': `${token}`
         },
-        body: JSON.stringify({ content: postContent })
+        body: formData
     });
 
     const data = await response.json();
 
     if (response.ok) {
-        alert('Post created successfully!');
         document.getElementById('postContent').value = ''; 
+        document.getElementById('postImage').value = ''; 
         getProfile(); // Refresh the profile to show the new post
     } else {
         alert(data.message || 'Failed to create post');
     }
 }
+
+
+// Modal section start
+let currentPostIndex = null; 
+
+// Open the modal and set the content for the selected post
+function openUpdateModal(index, currentContent) {
+    currentPostIndex = index;
+    document.getElementById('updatePostContent').value = currentContent;
+    document.getElementById('updateModal').style.display = 'block';
+}
+
+// Close the modal
+function closeModal() {
+    document.getElementById('updateModal').style.display = 'none';
+    document.getElementById('updatePostContent').value = ''; // Clear content for future updates
+    currentPostIndex = null; // Reset the post index
+}
+
+
+// Submit the updated post content
+async function submitUpdate() {
+    const updatedContent = document.getElementById('updatePostContent').value;
+    if (!updatedContent) {
+        alert("Please enter content to update.");
+        return;
+    }
+
+    const token = localStorage.getItem('token');
+    const response = await fetch(`${API_BASE_URL}/user/update-post/${currentPostIndex}`, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `${token}`
+        },
+        body: JSON.stringify({ content: updatedContent })
+    });
+
+    const data = await response.json();
+    if (response.ok) {
+        closeModal();
+        getProfile(); 
+    } else {
+        alert(data.message || 'Failed to update post');
+    }
+}
+// Delete post section 
+async function deletePost(index) {
+    const confirmed = confirm('Are you sure to you want to delete this post?');
+    if(!confirmed)return;
+    const token = localStorage.getItem('token');
+    const response = await fetch(`${API_BASE_URL}/user/delete-post/${index}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `${token}` }
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+        getProfile(); // Refresh posts after deletion
+    } else {
+        alert(data.message);
+    }
+}
+
+
 
 // Logout function
 function logout() {
@@ -130,10 +282,14 @@ function logout() {
     window.location.href = 'login.html';
 }
 
-
 // Redirect to the update page
 function redirectToUpdatePage() {
     window.location.href = 'update.html';
+};
+
+//redirect to profile
+function MyProfile() {
+    window.location.href = 'profile.html';
 }
 
 // Update user information function
@@ -186,7 +342,7 @@ async function deleteUser() {
     const confirmDelete = confirm('Are you sure you want to delete your account? This action cannot be undone.');
     if (!confirmDelete) return;
 
-    const userId = getUserIdFromToken(token); // Function to decode user ID from token
+    const userId = getUserIdFromToken(token);
 
     const response = await fetch(`${API_BASE_URL}/user/delete-profile/${userId}`, {
         method: 'DELETE',
@@ -207,19 +363,37 @@ async function deleteUser() {
     }
 }
 
+async function requestPasswordReset(event) {
+    event.preventDefault();
+    const email = document.getElementById('forgotEmail').value;
+
+    const response = await fetch(`${API_BASE_URL}/forgot-password`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+    });
+
+    const data = await response.json();
+    if (response.ok) {
+        alert(data.message);
+    } else {
+        alert(data.message || 'Failed to send reset email');
+    }
+}
+
 // Helper function to decode user ID from JWT token
 function getUserIdFromToken(token) {
     const payload = JSON.parse(atob(token.split('.')[1]));
     return payload.userId;
 }
 
-// Auto-redirect based on token
 window.onload = function() {
     const token = localStorage.getItem('token');
     if (token && (window.location.pathname.endsWith('login.html') || window.location.pathname.endsWith('signup.html'))) {
         window.location.href = 'profile.html';
     } else if (window.location.pathname.endsWith('profile.html')) {
         getProfile(); 
+    } else if (window.location.pathname.endsWith('timeline.html')) {
+        getTimelinePosts();
     }
 };
-

@@ -2,29 +2,62 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Profile</title>
     <link rel="stylesheet" href="profile.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
-    <div class="container">
-        <header class="profile-header">
-            <h2>Username:</h2>
-            <button class="logout-btn" onclick="logout()">Logout</button>
-        </header>
+      <div class="main">
+        <nav>
+            <div class="navbar">
+              <div class="logo"><a href="http://localhost:4000/timeline.html">linkUp <i class="fa-solid fa-square-share-nodes"></i></a></div>
+              <ul class="menu">
+                <li><a href="http://localhost:4000/timeline.html">Home</a></li>
+                <li><a href="http://localhost:4000/profile.html">My profile</a></li>
+                <li><a href="http://localhost:4000/update.html">Setting</a></li>
+              </ul>
+              <button class="logout-btn" onclick="logout()">Logout</button> 
+            </div>
+        </nav>
 
+     <!-- My Profile section -->
+    <div class="container-sec">
+    <div class="container">
         <div id="profileInfo" class="profile-info">
             <!-- User info will be populated here -->
         </div>
-
         <form id="postForm" class="post-form" onsubmit="createPost(event)">
-            <textarea id="postContent" placeholder="Write something..." required></textarea>
+            <textarea id="postContent" maxlength="50" placeholder="Write something..." required></textarea>
+            <input type="file" id="postImage" accept="image/*">
             <button type="submit">Submit Post</button>
         </form>
-        <div class="btn">
-        <button class="delete-btn" onclick="deleteUser()">Delete User</button>
-        <button class="update-btn" onclick="redirectToUpdatePage()">Update Profile</button>
+    </div>
+    <div class="container-1">
+        <div id="post">
+            <!-- Post -->
         </div>
     </div>
+    </div> 
+<!-- Modal section start  -->
+    <div id="updateModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Update Post</h2>
+            <textarea id="updatePostContent" rows="4" cols="60" placeholder="Enter updated content..."></textarea>
+            <button onclick="submitUpdate()">Save</button>
+        </div>
+    </div>
+        <!-- Footer HTML -->
+        <footer class="footer">
+            <p>linkUp all rights reserved © 2024</p>
+            <ul class="footer-links">
+                <li><a href="#">Privacy Policy</a></li>
+                <li><a href="#">Terms of Service</a></li>
+                <li><a href="#">Contact Us</a></li>
+            </ul>
+        </footer>
+      </div>
 
     <script src="script.js"></script>
 </body>

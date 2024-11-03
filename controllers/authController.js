@@ -108,5 +108,73 @@ const login = async (req, res) => {
     }
 };
 
+const crypto = require('crypto');
 
-module.exports = { signup, login, verifyEmail };
+const forgotPassword = async (req, res) => {
+    const { email } = req.body;
+    try {
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        const resetToken = crypto.randomBytes(32).toString('hex');
+        const resetTokenExpires = Date.now() + 3600000; // 1 hour from now
+
+        user.resetPasswordToken = resetToken;
+        user.resetPasswordExpires = resetTokenExpires;
+        await user.save();
+
+        const resetLink = `http://localhost:4000/reset-password?token=${resetToken}`;
+
+        const mailOptions = {
+            from: 'zubairfarooq688@gmail.com',
+            to: user.email,
+            subject: 'Password Reset',
+            html: `
+            <div style="font-family: Arial, sans-serif; color: #333;">
+                <h2>Reset Your Password</h2>
+                <p>Click the link below to reset your password:</p>
+                <a href="${resetLink}" style="display: inline-block; margin-top: 20px; padding: 10px 20px; color: white; background-color: #4CAF50; text-decoration: none; border-radius: 5px; font-size: 16px;">
+                    Reset Password
+                </a>
+                <p>If you did not request this, please ignore this email.</p>
+            </div>
+            `
+        };
+
+        await transporter.sendMail(mailOptions);
+        res.status(200).json({ message: "Password reset email sent" });
+    } catch (error) {
+        console.error("Error in forgot password:", error);
+        res.status(500).json({ message: 'Error in forgot password', error });
+    }
+};
+const resetPassword = async (req, res) => {
+    const { token } = req.query;
+    const { newPassword } = req.body;
+
+    try {
+        const user = await User.findOne({
+            resetPasswordToken: token,
+            resetPasswordExpires: { $gt: Date.now() }
+        });
+
+        if (!user) {
+            return res.status(400).json({ message: "Invalid or expired reset token" });
+        }
+
+        user.password = newPassword;
+        user.resetPasswordToken = undefined;
+        user.resetPasswordExpires = undefined;
+        await user.save();
+
+        res.status(200).json({ message: "Password has been reset successfully" });
+    } catch (error) {
+        console.error("Error in resetting password:", error);
+        res.status(500).json({ message: 'Error in resetting password', error });
+    }
+};
+
+
+module.exports = { signup, login, verifyEmail,forgotPassword,resetPassword };
