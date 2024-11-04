@@ -146,7 +146,7 @@ async function likePost(creatorId, postId) {
     const data = await response.json();
 
     if (response.ok) {
-        getTimelinePosts(); // Refresh the timeline to show updated like count
+        getTimelinePosts();
     } else {
         alert(data.message || 'Failed to like post');
     }
@@ -360,24 +360,6 @@ async function deleteUser() {
         window.location.href = 'signup.html'; // Redirect to signup page
     } else {
         alert(data.message || 'Failed to delete user');
-    }
-}
-
-async function requestPasswordReset(event) {
-    event.preventDefault();
-    const email = document.getElementById('forgotEmail').value;
-
-    const response = await fetch(`${API_BASE_URL}/forgot-password`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email })
-    });
-
-    const data = await response.json();
-    if (response.ok) {
-        alert(data.message);
-    } else {
-        alert(data.message || 'Failed to send reset email');
     }
 }
 

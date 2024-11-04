@@ -64,7 +64,7 @@ nav{
   padding-top: 100px;
   padding-bottom: 10px;
 }
-#timelineContainer {
+.user-timeline {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 1em;
@@ -120,4 +120,7 @@ nav{
 
 .footer p {
     font-size: 0.9em;
+}
+#Timeline-txt{
+  text-align: center;
 }
